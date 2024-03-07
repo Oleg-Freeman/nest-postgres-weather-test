@@ -1,0 +1,28 @@
+version: '3'
+services:
+  postgres:
+    container_name: weather-app-postgres
+    image: postgres:latest
+    ports:
+      - '${POSTGRES_PORT}:5432'
+    env_file:
+      - .env
+    networks:
+      - common-net
+  backend:
+    container_name: weather-app-backend
+    build:
+        context: .
+        dockerfile: Dockerfile
+    ports:
+      - '${PORT}:${PORT}'
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+    networks:
+      - common-net
+
+networks:
+  common-net:
+    driver: bridge

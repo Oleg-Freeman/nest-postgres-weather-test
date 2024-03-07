@@ -4,6 +4,7 @@ import {
   ValidationPipeOptions,
 } from '@nestjs/common';
 import * as dotenv from 'dotenv';
+import { DataSourceOptions } from 'typeorm';
 
 dotenv.config();
 
@@ -46,6 +47,23 @@ class ConfigService {
     }
 
     return options;
+  }
+
+  getDbConfig(): DataSourceOptions {
+    return {
+      type: 'postgres',
+      port: parseInt(this.getValue('POSTGRES_PORT')),
+      host: this.getValue('POSTGRES_HOST') || 'localhost',
+      username: this.getValue('POSTGRES_USER'),
+      password: this.getValue('POSTGRES_PASSWORD'),
+      database: this.getValue('POSTGRES_DB'),
+      entities: ['dist/modules/**/*.entity{.ts,.js}'],
+      migrations: ['dist/migrations/*.js'],
+      migrationsTableName: 'migrations_typeorm',
+      migrationsRun: false,
+      logging: true,
+      synchronize: false,
+    };
   }
 
   // getJwtSecret(): string {
