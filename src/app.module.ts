@@ -1,7 +1,13 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { configService } from './configs';
 
 @Module({
-  imports: [],
+  imports: [
+    TypeOrmModule.forRoot({
+      ...configService.getDbConfig(),
+    }),
+  ],
   controllers: [],
   providers: [],
 })

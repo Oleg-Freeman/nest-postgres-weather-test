@@ -66,6 +66,14 @@ class ConfigService {
     };
   }
 
+  getOpenWeatherApiKey(): string {
+    return this.getValue('OPEN_WEATHER_API_KEY');
+  }
+
+  getOpenWeatherApiUrl(): string {
+    return this.getValue('OPEN_WEATHER_API_URL');
+  }
+
   // getJwtSecret(): string {
   //   return this.getValue('JWT_SECRET');
   // }
