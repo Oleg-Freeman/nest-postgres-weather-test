@@ -24,6 +24,9 @@ export class WeatherEntity {
   @ApiProperty({ example: {}, description: 'Weather data' })
   @Column({ type: 'jsonb', nullable: false, default: {} })
   data: {
+    current?: {
+      [key: string]: unknown;
+    };
     [key: string]: unknown;
   };
 
