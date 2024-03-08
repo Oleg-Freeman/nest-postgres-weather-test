@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, Query } from '@nestjs/common';
 import { WeatherService } from './weather.service';
 import { WeatherDto } from './dto/weather.dto';
 
@@ -12,7 +12,7 @@ export class WeatherController {
   }
 
   @Get()
-  findAll() {
-    return this.weatherService.findAll();
+  findAll(@Query() weatherDto: WeatherDto) {
+    return this.weatherService.findAll(weatherDto);
   }
 }
