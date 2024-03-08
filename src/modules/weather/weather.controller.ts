@@ -7,12 +7,12 @@ export class WeatherController {
   constructor(private readonly weatherService: WeatherService) {}
 
   @Post()
-  create(@Body() weatherDto: WeatherDto) {
+  async create(@Body() weatherDto: WeatherDto) {
     return this.weatherService.create(weatherDto);
   }
 
   @Get()
-  findAll(@Query() weatherDto: WeatherDto) {
+  async findAll(@Query() weatherDto: WeatherDto) {
     return this.weatherService.findAll(weatherDto);
   }
 }
