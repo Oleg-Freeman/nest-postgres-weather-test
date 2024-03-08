@@ -18,10 +18,9 @@ export class WeatherService {
   async create({ lat, lon }: WeatherDto) {
     const data = await this.fetchOpenWeather({ lat, lon });
 
-    // return this.weatherRepository.save(
-    //   this.weatherRepository.create({ lat, lon, data }),
-    // );
-    return data;
+    return this.weatherRepository.save(
+      this.weatherRepository.create({ lat, lon, data }),
+    );
   }
 
   async findAll({ lat, lon }: WeatherDto) {
