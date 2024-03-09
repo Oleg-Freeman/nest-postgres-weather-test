@@ -60,7 +60,7 @@ class ConfigService {
       entities: ['dist/modules/**/*.entity{.ts,.js}'],
       migrations: ['dist/migrations/*.js'],
       migrationsTableName: 'migrations_typeorm',
-      migrationsRun: false,
+      migrationsRun: true,
       logging: true,
       synchronize: false,
     };
