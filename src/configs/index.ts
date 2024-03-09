@@ -90,14 +90,6 @@ class ConfigService {
       ],
     };
   }
-
-  // getJwtSecret(): string {
-  //   return this.getValue('JWT_SECRET');
-  // }
-  //
-  // getJwtExpiresIn(): string {
-  //   return this.getValue('JWT_EXPIRES_IN');
-  // }
 }
 
 const configService = new ConfigService(process.env);
