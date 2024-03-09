@@ -2,7 +2,6 @@ import {
   Controller,
   Get,
   Post,
-  Body,
   Query,
   HttpStatus,
   HttpCode,
@@ -35,7 +34,7 @@ export class WeatherController {
     description: 'Weather record created successfully',
     type: WeatherResponseDto,
   })
-  async create(@Body() weatherDto: WeatherDto) {
+  async create(@Query() weatherDto: WeatherDto) {
     return this.weatherService.create(weatherDto);
   }
 

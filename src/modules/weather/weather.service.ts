@@ -15,8 +15,8 @@ export class WeatherService {
     private readonly httpService: HttpService,
   ) {}
 
-  async create({ lat, lon }: WeatherDto) {
-    const data = await this.fetchOpenWeather({ lat, lon });
+  async create({ lat, lon, part }: WeatherDto) {
+    const data = await this.fetchOpenWeather({ lat, lon, part });
 
     return this.weatherRepository.save(
       this.weatherRepository.create({ lat, lon, data }),
@@ -24,19 +24,43 @@ export class WeatherService {
   }
 
   async findAll({ lat, lon }: WeatherDto) {
-    return this.weatherRepository.find({ where: { lat, lon } });
+    return this.weatherRepository
+      .createQueryBuilder('w')
+      .select()
+      .where('w.lat = :lat', { lat })
+      .andWhere('w.lon = :lon', { lon })
+      .getMany();
   }
 
-  async fetchOpenWeather({ lat = 90, lon = 90 }: { lat: number; lon: number }) {
+  async fetchOpenWeather({
+    lat = 90,
+    lon = 90,
+    part,
+  }: {
+    lat: number;
+    lon: number;
+    part: string;
+  }) {
+    const params: {
+      lat: number;
+      lon: number;
+      appid: string;
+      exclude?: string;
+    } = {
+      lat,
+      lon,
+      appid: configService.getOpenWeatherApiKey(),
+    };
+
+    if (part) {
+      params.exclude = part;
+    }
+
     try {
       const response = this.httpService.get(
         configService.getOpenWeatherApiUrl(),
         {
-          params: {
-            lat,
-            lon,
-            appid: configService.getOpenWeatherApiKey(),
-          },
+          params,
         },
       );
       const { data } = await lastValueFrom(response);

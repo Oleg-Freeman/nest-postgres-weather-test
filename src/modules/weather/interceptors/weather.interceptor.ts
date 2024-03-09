@@ -9,7 +9,10 @@ import { WeatherEntity } from '../entities/weather.entity';
 
 @Injectable()
 export class WeatherInterceptor implements NestInterceptor {
-  private extractWeatherData({ data }: WeatherEntity) {
+  private extractWeatherData(
+    { data: { current = {} } }: WeatherEntity,
+    part = '',
+  ) {
     const {
       sunrise,
       sunset,
@@ -19,9 +22,9 @@ export class WeatherInterceptor implements NestInterceptor {
       humidity,
       uvi,
       wind_speed,
-    } = data?.current;
+    } = current;
 
-    return {
+    const result = {
       sunrise,
       sunset,
       temp,
@@ -31,17 +34,28 @@ export class WeatherInterceptor implements NestInterceptor {
       uvi,
       wind_speed,
     };
+
+    if (part?.length > 0) {
+      part.split(',').forEach((key) => {
+        delete result[key];
+      });
+    }
+
+    return result;
   }
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+    const req = context.switchToHttp().getRequest();
+    const { part } = req.query;
+
     return next.handle().pipe(
       map((weatherRecords: WeatherEntity | WeatherEntity[]) => {
         if (Array.isArray(weatherRecords)) {
           return weatherRecords.map((weather) =>
-            this.extractWeatherData(weather),
+            this.extractWeatherData(weather, part),
           );
         }
 
-        return this.extractWeatherData(weatherRecords);
+        return this.extractWeatherData(weatherRecords, part);
       }),
     );
   }
