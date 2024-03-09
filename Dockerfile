@@ -9,6 +9,5 @@ RUN npm install
 COPY . .
 
 EXPOSE $PORT
-ENV POSTGRES_HOST=postgres
 
 CMD npm start
